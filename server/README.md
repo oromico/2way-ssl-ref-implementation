@@ -16,3 +16,6 @@ this `demoapiserver`, the token parameter name will be `X-CLIENT-SERVER-TOKEN` (
 If the Client's HTTP Request to the "secure routes" is successfully served, the Server should reply with another
 "shared secret". This other "shared secret" will be included in the header of the Server's HTTP Response. In this
 `demoapiserver`, the token parameter name will be `X-SERVER-CLIENT-TOKEN`.
+
+
+<img src="https://github.com/oromico/2way-ssl-ref-implementation/blob/main/resources/2way-ssl-ref-implementation-demoapiserver.png" />
