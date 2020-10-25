@@ -5,7 +5,7 @@ A Flask application to demonstrate how 2-way SSL works from a Server's perspecti
 To run `demoapiserver`, simply following the step mentioned [here](https://github.com/oromico/2way-ssl-ref-implementation/blob/main/README.md#running-the-environment). 
 
 
-**Additional notes about security**
+## Additional notes about security
 
 For added security, other then using Client Certificate to verify the Client's identity by the Server, the Client
 should also supply a "shared secret" for every call to the Server's "secure routes".
