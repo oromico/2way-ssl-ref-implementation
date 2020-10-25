@@ -115,9 +115,13 @@ docker run -p 80:80 -p 443:443 -it --rm ref2wayssl
 
 **No client certificate supplied**
 
+Request:
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt
 ```
+
+Response:
 
 ```html
 <html>
@@ -132,9 +136,13 @@ curl https://dev.localhost/hello --cacert certs/ca.crt
 
 **Invalid client certificate supplied**
 
+Request:
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client_bad.key --cert certs/client_bad.crt
 ```
+
+Response:
 
 ```html
 <html>
@@ -149,9 +157,13 @@ curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client_bad.ke
 
 **Valid client certificate supplied**
 
+Request:
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client.key --cert certs/client.crt
 ```
+
+Response:
 
 ```json
 {"success":true}
