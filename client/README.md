@@ -1,6 +1,6 @@
 # `demoapiclient`
 
-A python commandline to demonstrate how 2-way SSL works from a client-perspective.
+A python commandline to demonstrate how 2-way SSL works from a Client's perspective.
 
 **Prerequisite:**
 
@@ -125,8 +125,8 @@ body:
 For added security, other then using Client Certificate to verify the Client's identity by the Server, the Client
 should also supply a "shared secret" for every call to the Server's "secure routes".
 
-The "shared secret" will be included in the HTTP Header of the HTTP Request. In this `demoapiclient`, the token
-parameter name will be `X-CLIENT-SERVER-TOKEN` (see [client/demoapiclient/lib/conf/app_settings.py](https://github.com/oromico/2way-ssl-ref-implementation/blob/main/client/demoapiclient/lib/conf/app_settings.py))
+The "shared secret" will be included in the header of the HTTP Request. In this `demoapiclient`, the token
+parameter name will be `X-CLIENT-SERVER-TOKEN` (see [client/demoapiclient/lib/conf/app_settings.py](https://github.com/oromico/2way-ssl-ref-implementation/blob/main/client/demoapiclient/lib/conf/app_settings.py)).
 
 #### Ping hello route without client token
 

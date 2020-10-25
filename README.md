@@ -47,7 +47,7 @@ openssl genrsa -out certs/ca.key 4096
 openssl req -x509 -new -nodes -days 3650 -key certs/ca.key -out certs/ca.crt -subj "/C=SG/O=ReplaceMe/OU=Private Certificate Authority/CN=replaceme.com"
 ```
 
-** Generating the Server certificate**
+**Generating the Server certificate**
 
 ```
 openssl genrsa -out certs/server.key 4096
@@ -78,7 +78,7 @@ To view the certificate:
 openssl x509 -noout -text -in certs/client.crt
 ```
 
-** Generating Client certificate with invalid CA**
+**Generating Client certificate with invalid CA**
 
 This Client Certificate is used to demonstrate what will happen if the Client is untrusted.
 
