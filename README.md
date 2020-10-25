@@ -1,36 +1,53 @@
 # 2-way SSL (Reference implementation)
 
-# Building the environment
+This is an implementation to demonstrate how 2-way SSL works. The following serves to depict the high-level architecture
+and the components used in this project. 
 
-## Requirements:
+<img src="https://github.com/oromico/2way-ssl-ref-implementation/blob/main/resources/2way-ssl-ref-implementation.png" />
 
-- Docker
-- OpenSSL
+- `demoapiclient` - A simple python program to make Restful call to `demoapiserver`. (for details, please refer [client README](https://github.com/oromico/2way-ssl-ref-implementation/blob/main/client/README.md))
+- `demoapiserver` - A Flask application demonstrating 2-way SSL identity verification. (for details, please refer [server README](https://github.com/oromico/2way-ssl-ref-implementation/blob/main/server/README.md))
 
-## Steps involved
+To run this project, you will need:
 
-1. [Generate Certificates]()
+1. Docker
+2. OpenSSL
+3. `curl` command
 
-2. [Build a docker image containing Ubuntu installed with Nginx and python Flask app]()
+(_Note: All commands listed in this README are only tested in an Ubuntu 18.04 environment._)
 
-3.
+The following are the steps required to build and run this project:
 
-### Generate self-signed CA certificates:
+1. [Generate Certificates](#generate-self-signed-ca-certificates)
 
-##### generate a RANDFILE
-This is for serving as seed data when generating the certificates in the steps below. Only required if you're paranoid about security.
+2. [Build a docker image containing Ubuntu installed with Nginx and python Flask app](#build-the-docker-image)
+
+3. [Running `demoapiserver`](#running-the-environment)
+
+4. [Verifying your setup works](#verifying-the-setup)
+
+---
+
+## Building the environment
+
+### Generate self-signed CA certificates
+
+**Generate a RANDFILE**
+This is for serving as seed data when generating the certificates in the steps below. Only required if you're
+paranoid about security.
 
 ```
 dd if=/dev/urandom of=~/.rnd bs=256 count=1
 ```
 
-##### Root CA
+**Generating the Root CA**
+
 ```
 openssl genrsa -out certs/ca.key 4096
 openssl req -x509 -new -nodes -days 3650 -key certs/ca.key -out certs/ca.crt -subj "/C=SG/O=ReplaceMe/OU=Private Certificate Authority/CN=replaceme.com"
 ```
 
-##### Server certificate
+** Generating the Server certificate**
 
 ```
 openssl genrsa -out certs/server.key 4096
@@ -44,7 +61,10 @@ To view the certificate:
 openssl x509 -noout -text -in certs/server.crt
 ```
 
-##### Client certificate
+Note: In actual production, you will want the Server Certificate to be signed by a proper Certificate Authority (CA)
+such as IdenTrust, DigiCert, Letsencrypt, etc. 
+
+**Generating the Client certificate**
 
 ```
 openssl genrsa -out certs/client.key 4096
@@ -58,7 +78,9 @@ To view the certificate:
 openssl x509 -noout -text -in certs/client.crt
 ```
 
-##### Client certificate with invalid CA
+** Generating Client certificate with invalid CA**
+
+This Client Certificate is used to demonstrate what will happen if the Client is untrusted.
 
 ```
 openssl genrsa -out certs/ca_bad.key 4096
@@ -75,22 +97,23 @@ To view the certificate:
 openssl x509 -noout -text -in certs/client_bad.crt
 ```
 
-### Build Docker
+### Build the Docker image
 
 ```
 docker build --target ref2wayssl_base -t ref2wayssl_base .
 docker build --target ref2wayssl -t ref2wayssl .
 ```
 
-# Running the environment
+## Running the environment
 
 ```
 docker run -p 80:80 -p 443:443 -it --rm ref2wayssl
 ```
 
-# Verify
+## Verifying the setup
 
-### No client certificate supplied
+**No client certificate supplied**
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt
 ```
@@ -106,7 +129,8 @@ curl https://dev.localhost/hello --cacert certs/ca.crt
 </html>
 ```
 
-### Invalid client certificate supplied
+**Invalid client certificate supplied**
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client_bad.key --cert certs/client_bad.crt
 ```
@@ -122,7 +146,8 @@ curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client_bad.ke
 </html>
 ```
 
-### Valid client certificate supplied
+**Valid client certificate supplied**
+
 ```
 curl https://dev.localhost/hello --cacert certs/ca.crt --key certs/client.key --cert certs/client.crt
 ```
